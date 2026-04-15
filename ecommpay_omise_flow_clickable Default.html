@@ -1,25 +1,508 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample HTML</title>
-    <style>
-        /* Add your styles here */
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecommpay/Omise Flow</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #1a1a2e;
+      padding: 32px 24px 72px;
+      max-width: 960px;
+      margin-inline: auto;
+    }
+
+    h1 { font-size: 1.7rem; margin-bottom: 6px; }
+    .sub { color: #5f6b7a; margin-bottom: 24px; }
+
+    details {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin-bottom: 14px;
+      padding: 0;
+    }
+
+    summary {
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      color: #fff;
+    }
+
+    .branch > summary {
+      color: #1a1a2e;
+      background: #f5f5f5;
+    }
+
+    .branch > summary.lbl-yes {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+
+    .branch > summary.lbl-no {
+      background: #ffcdd2;
+      color: #b71c1c;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    .hdr-blue { background: #283593; }
+
+    .section-body { padding: 18px; }
+
+    .box {
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .act { background: #e8f5e9; border-left: 4px solid #43a047; }
+    .dec { background: #ede7f6; border-left: 4px solid #7e57c2; }
+
+    .status {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .branch { margin-top: 10px; }
+    .branch-label {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .branch-body {
+      margin-left: 10px;
+      padding-left: 10px;
+      border-left: 2px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-    <details>
-        <summary>Detail 1</summary>
-        <p>Content for detail 1</p>
-    </details>
-    <details>
-        <summary>Detail 2</summary>
-        <p>Content for detail 2</p>
-    </details>
-    <details>
-        <summary>Detail 3</summary>
-        <p>Content for detail 3</p>
-    </details>
+
+  <h1>💳 Ecommpay/Omise Flow</h1>
+  <p class="sub">Dispute checking flow</p>
+
+  <!-- STEP 1 -->
+  <details open>
+    <summary class="hdr-blue">Step 1 — Ecommpay/Omise Start</summary>
+    <div class="section-body">
+      <div class="box dec">Identify payment gateway → Ecommpay/Omise</div>
+      <div class="box dec">Is it a double payment?</div>
+
+      <details class="branch" open>
+        <summary class="branch-label lbl-yes">Yes</summary>
+        <div class="branch-body">
+          <div class="box act">Accept full amount</div>
+        </div>
+      </details>
+
+      <details class="branch" open>
+        <summary class="branch-label lbl-no">No</summary>
+        <div class="branch-body">
+          <div class="box dec">Check the booking status</div>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <!-- STEP 2 -->
+  <details open>
+    <summary class="hdr-blue">Step 2 — Check Booking Status</summary>
+    <div class="section-body">
+      <div class="box dec">Check the booking status</div>
+
+      <div class="status">Paid Status</div>
+      <div class="status">Confirmed Status</div>
+    </div>
+  </details>
+
+  <!-- STEP 3 -->
+  <details open>
+    <summary class="hdr-blue">Step 3 — Paid Status</summary>
+    <div class="section-body">
+
+      <div class="box dec">In Zendesk/Stats: Check whether the customer has contacted us before opening the dispute</div>
+
+      <details class="branch" open>
+        <summary class="branch-label lbl-yes">Yes</summary>
+        <div class="branch-body">
+
+          <div class="box dec">Check if the trip is available on the website and the refund policy is more than 72(n) hours prior to B2C</div>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-yes">Yes</summary>
+            <div class="branch-body">
+              <div class="box act">Blacklist the booking</div>
+              <div class="box act">Offer to continue the booking process - reconfirm within 48 hours (Macro?)</div>
+              <div class="box dec">Customer response → Accepted / Rejected / No response</div>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-yes">Accepted</summary>
+                <div class="branch-body">
+                  <div class="box act">Hold the booking process and wait until the case is closed on the backend</div>
+                  <div class="box dec">Dispute case is closed</div>
+                  <div class="box act">Whitelist the booking expecting the confirmation</div>
+                  <div class="box dec">Times up / Cannot be confirmed</div>
+                  <div class="box act">Issue a full refund</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-no">Rejected / No response</summary>
+                <div class="branch-body">
+                  <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+                  <div class="box dec">Check if it is a single booking in one transaction or not</div>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-yes">Yes</summary>
+                    <div class="branch-body">
+                      <div class="box act">Accept full amount</div>
+                    </div>
+                  </details>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-no">No</summary>
+                    <div class="branch-body">
+                      <div class="box dec">Check if the disputed amount is for only the PAID status booking</div>
+
+                      <details class="branch" open>
+                        <summary class="branch-label lbl-yes">Yes</summary>
+                        <div class="branch-body">
+                          <div class="box act">Accept full amount</div>
+                        </div>
+                      </details>
+
+                      <details class="branch" open>
+                        <summary class="branch-label lbl-no">No</summary>
+                        <div class="branch-body">
+                          <div class="box act">Submit a document</div>
+                          <div class="box act">Submit the ticket as In Progress</div>
+                        </div>
+                      </details>
+                    </div>
+                  </details>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-no">No</summary>
+            <div class="branch-body">
+              <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+
+              <div class="box dec">Check if it is a single booking in one transaction or not</div>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-yes">Yes</summary>
+                <div class="branch-body">
+                  <div class="box act">Accept full amount</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-no">No</summary>
+                <div class="branch-body">
+                  <div class="box dec">Check if the disputed amount is for only the PAID status booking</div>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-yes">Yes</summary>
+                    <div class="branch-body">
+                      <div class="box act">Accept full amount</div>
+                    </div>
+                  </details>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-no">No</summary>
+                    <div class="branch-body">
+                      <div class="box act">Submit a document</div>
+                      <div class="box act">Submit the ticket as In Progress</div>
+                    </div>
+                  </details>
+
+                </div>
+              </details>
+
+            </div>
+          </details>
+
+        </div>
+      </details>
+
+      <details class="branch" open>
+        <summary class="branch-label lbl-no">No</summary>
+        <div class="branch-body">
+          <div class="box dec">Open a dispute before godate</div>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-yes">Yes</summary>
+            <div class="branch-body">
+              <div class="box act">Ban service</div>
+              <div class="box dec">Check if the trip is available on the website and the refund policy is more than 72(n) hours prior to B2C</div>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-yes">Yes</summary>
+                <div class="branch-body">
+                  <div class="box act">Blacklist the booking</div>
+                  <div class="box act">Offer to continue the booking process - reconfirm within 48 hours (Macro?)</div>
+                  <div class="box dec">Customer response → Accepted / Rejected / No response</div>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-yes">Accepted</summary>
+                    <div class="branch-body">
+                      <div class="box act">Hold the booking process and wait until the case is closed on the backend</div>
+                      <div class="box dec">Dispute case is closed</div>
+                      <div class="box act">Whitelist the booking expecting the confirmation</div>
+                      <div class="box dec">Times up / Cannot be confirmed</div>
+                      <div class="box act">Issue a full refund</div>
+                    </div>
+                  </details>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-no">Rejected / No response</summary>
+                    <div class="branch-body">
+                      <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+                      <div class="box dec">Check if it is a single booking in one transaction or not</div>
+
+                      <details class="branch" open>
+                        <summary class="branch-label lbl-yes">Yes</summary>
+                        <div class="branch-body">
+                          <div class="box act">Accept full amount</div>
+                        </div>
+                      </details>
+
+                      <details class="branch" open>
+                        <summary class="branch-label lbl-no">No</summary>
+                        <div class="branch-body">
+                          <div class="box dec">Check if the disputed amount is for only the PAID status booking</div>
+
+                          <details class="branch" open>
+                            <summary class="branch-label lbl-yes">Yes</summary>
+                            <div class="branch-body">
+                              <div class="box act">Accept full amount</div>
+                            </div>
+                          </details>
+
+                          <details class="branch" open>
+                            <summary class="branch-label lbl-no">No</summary>
+                            <div class="branch-body">
+                              <div class="box act">Submit a document</div>
+                              <div class="box act">Submit the ticket as In Progress</div>
+                            </div>
+                          </details>
+                        </div>
+                      </details>
+                    </div>
+                  </details>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-no">No</summary>
+                <div class="branch-body">
+                  <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+                  <div class="box dec">Check if it is a single booking in one transaction or not</div>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-yes">Yes</summary>
+                    <div class="branch-body">
+                      <div class="box act">Accept full amount</div>
+                    </div>
+                  </details>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-no">No</summary>
+                    <div class="branch-body">
+                      <div class="box dec">Check if the disputed amount is for only the PAID status booking</div>
+
+                      <details class="branch" open>
+                        <summary class="branch-label lbl-yes">Yes</summary>
+                        <div class="branch-body">
+                          <div class="box act">Accept full amount</div>
+                        </div>
+                      </details>
+
+                      <details class="branch" open>
+                        <summary class="branch-label lbl-no">No</summary>
+                        <div class="branch-body">
+                          <div class="box act">Submit a document</div>
+                          <div class="box act">Submit the ticket as In Progress</div>
+                        </div>
+                      </details>
+                    </div>
+                  </details>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-no">No</summary>
+            <div class="branch-body">
+              <div class="box dec">Check if it is a single booking in one transaction or not</div>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-yes">Yes</summary>
+                <div class="branch-body">
+                  <div class="box act">Accept full amount</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-no">No</summary>
+                <div class="branch-body">
+                  <div class="box dec">Check if the disputed amount is for only the PAID status booking</div>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-yes">Yes</summary>
+                    <div class="branch-body">
+                      <div class="box act">Accept full amount</div>
+                    </div>
+                  </details>
+
+                  <details class="branch" open>
+                    <summary class="branch-label lbl-no">No</summary>
+                    <div class="branch-body">
+                      <div class="box act">Submit a document</div>
+                      <div class="box act">Submit the ticket as In Progress</div>
+                    </div>
+                  </details>
+                </div>
+              </details>
+            </div>
+          </details>
+        </div>
+      </details>
+
+    </div>
+  </details>
+
+  <!-- STEP 4 -->
+  <details open>
+    <summary class="hdr-blue">Step 4 — Confirmed Status</summary>
+    <div class="section-body">
+
+      <div class="box dec">In Zendesk/Stats: Check whether the customer has contacted us before opening the dispute</div>
+
+      <details class="branch" open>
+        <summary class="branch-label lbl-yes">Yes</summary>
+        <div class="branch-body">
+          <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+          <div class="box dec">Check if the transaction has only 1 booking</div>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-yes">Yes</summary>
+            <div class="branch-body">
+              <div class="box dec">Review dispute conditions</div>
+
+              <details class="branch" open>
+                <summary class="branch-label">When we are confident in the evidence</summary>
+                <div class="branch-body">
+                  <div class="box act">Submit a document</div>
+                  <div class="box act">Submit the ticket as In Progress</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label">A refund is offered based on the operator’s cancellation policy or compensation</summary>
+                <div class="branch-body">
+                  <div class="box act">Accept disputed amount</div>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-no">No</summary>
+            <div class="branch-body">
+              <div class="box dec">Check if the disputed amount is for only the problem booking</div>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-yes">Yes</summary>
+                <div class="branch-body">
+                  <div class="box act">Accept the disputed amount</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-no">No</summary>
+                <div class="branch-body">
+                  <div class="box act">Submit a document</div>
+                  <div class="box act">Submit the ticket as In Progress</div>
+                </div>
+              </details>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="branch" open>
+        <summary class="branch-label lbl-no">No</summary>
+        <div class="branch-body">
+          <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+          <div class="box act">Ban service</div>
+          <div class="box dec">Check if the transaction has only 1 booking</div>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-yes">Yes</summary>
+            <div class="branch-body">
+              <div class="box dec">Review dispute conditions</div>
+
+              <details class="branch" open>
+                <summary class="branch-label">When we are confident in the evidence</summary>
+                <div class="branch-body">
+                  <div class="box act">Submit a document</div>
+                  <div class="box act">Submit the ticket as In Progress</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label">A refund is offered based on the operator’s cancellation policy or compensation</summary>
+                <div class="branch-body">
+                  <div class="box act">Accept disputed amount</div>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="branch" open>
+            <summary class="branch-label lbl-no">No</summary>
+            <div class="branch-body">
+              <div class="box dec">Check if the disputed amount is for only the problem booking</div>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-yes">Yes</summary>
+                <div class="branch-body">
+                  <div class="box act">Accept the disputed amount</div>
+                </div>
+              </details>
+
+              <details class="branch" open>
+                <summary class="branch-label lbl-no">No</summary>
+                <div class="branch-body">
+                  <div class="box act">Submit a document</div>
+                  <div class="box act">Submit the ticket as In Progress</div>
+                </div>
+              </details>
+            </div>
+          </details>
+        </div>
+      </details>
+
+    </div>
+  </details>
+
 </body>
 </html>
