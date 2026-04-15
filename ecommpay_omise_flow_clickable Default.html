@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecommpay/Omise Flow</title>
+  <title>Ecommpay/Omise Flow - Preview</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -92,7 +92,7 @@
 <body>
 
   <h1>💳 Ecommpay/Omise Flow</h1>
-  <p class="sub">Dispute checking flow</p>
+  <p class="sub">Step 1–2 preview</p>
 
   <!-- STEP 1 -->
   <details open>
@@ -125,6 +125,7 @@
 
       <div class="status">Paid Status</div>
       <div class="status">Confirmed Status</div>
+
     </div>
   </details>
 
@@ -135,6 +136,7 @@
 
       <div class="box dec">In Zendesk/Stats: Check whether the customer has contacted us before opening the dispute</div>
 
+      <!-- YES branch -->
       <details class="branch" open>
         <summary class="branch-label lbl-yes">Yes</summary>
         <div class="branch-body">
@@ -162,7 +164,7 @@
               <details class="branch" open>
                 <summary class="branch-label lbl-no">Rejected / No response</summary>
                 <div class="branch-body">
-                  <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+                  <div class="box act">In Zendesk: use the Macro &quot;Customer opened a dispute case&quot; and submit the ticket as On Hold</div>
                   <div class="box dec">Check if it is a single booking in one transaction or not</div>
 
                   <details class="branch" open>
@@ -201,7 +203,7 @@
           <details class="branch" open>
             <summary class="branch-label lbl-no">No</summary>
             <div class="branch-body">
-              <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+              <div class="box act">In Zendesk: use the Macro &quot;Customer opened a dispute case&quot; and submit the ticket as On Hold</div>
 
               <div class="box dec">Check if it is a single booking in one transaction or not</div>
 
@@ -215,6 +217,7 @@
               <details class="branch" open>
                 <summary class="branch-label lbl-no">No</summary>
                 <div class="branch-body">
+
                   <div class="box dec">Check if the disputed amount is for only the PAID status booking</div>
 
                   <details class="branch" open>
@@ -241,6 +244,7 @@
         </div>
       </details>
 
+      <!-- NO branch -->
       <details class="branch" open>
         <summary class="branch-label lbl-no">No</summary>
         <div class="branch-body">
@@ -273,7 +277,7 @@
                   <details class="branch" open>
                     <summary class="branch-label lbl-no">Rejected / No response</summary>
                     <div class="branch-body">
-                      <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+                      <div class="box act">In Zendesk: use the Macro &quot;Customer opened a dispute case&quot; and submit the ticket as On Hold</div>
                       <div class="box dec">Check if it is a single booking in one transaction or not</div>
 
                       <details class="branch" open>
@@ -312,7 +316,7 @@
               <details class="branch" open>
                 <summary class="branch-label lbl-no">No</summary>
                 <div class="branch-body">
-                  <div class="box act">In Zendesk: use the Macro "Customer opened a dispute case" and submit the ticket as On Hold</div>
+                  <div class="box act">In Zendesk: use the Macro &quot;Customer opened a dispute case&quot; and submit the ticket as On Hold</div>
                   <div class="box dec">Check if it is a single booking in one transaction or not</div>
 
                   <details class="branch" open>
